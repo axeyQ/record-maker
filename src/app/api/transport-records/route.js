@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 
+// This ensures the Prisma Client is only initiated once during runtime
+let db = prisma;
+
 // GET - Retrieve all transport records
 export async function GET(request) {
   try {
@@ -35,10 +38,10 @@ export async function GET(request) {
     }
     
     // Get total count with filters applied
-    const totalCount = await prisma.transportRecord.count({ where });
+    const totalCount = await db.transportRecord.count({ where });
     
     // Get records with pagination and filters
-    const records = await prisma.transportRecord.findMany({
+    const records = await db.transportRecord.findMany({
       where,
       skip,
       take: limit,
@@ -85,7 +88,7 @@ export async function POST(request) {
       data.amountPaid = parseFloat(data.amountPaid);
     }
     
-    const newRecord = await prisma.transportRecord.create({
+    const newRecord = await db.transportRecord.create({
       data: {
         name: data.name,
         mobileNumber: data.mobileNumber,

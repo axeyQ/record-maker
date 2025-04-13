@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 
+// This ensures the Prisma Client is only initiated once during runtime
+let db = prisma;
+
 // GET - Fetch a single transport record by ID
 export async function GET(request, { params }) {
   try {
@@ -10,7 +13,7 @@ export async function GET(request, { params }) {
       return NextResponse.json({ error: 'Invalid ID format' }, { status: 400 });
     }
     
-    const record = await prisma.transportRecord.findUnique({
+    const record = await db.transportRecord.findUnique({
       where: { id }
     });
     
@@ -39,7 +42,7 @@ export async function PUT(request, { params }) {
     // If we're updating multiple fields, validate them
     if (Object.keys(data).length > 1) {
       // Get the existing record to merge with the updates for validation
-      const existingRecord = await prisma.transportRecord.findUnique({
+      const existingRecord = await db.transportRecord.findUnique({
         where: { id }
       });
       
@@ -67,7 +70,7 @@ export async function PUT(request, { params }) {
     }
     
     // Check if record exists
-    const existingRecord = await prisma.transportRecord.findUnique({
+    const existingRecord = await db.transportRecord.findUnique({
       where: { id }
     });
     
@@ -76,7 +79,7 @@ export async function PUT(request, { params }) {
     }
     
     // Update record
-    const updatedRecord = await prisma.transportRecord.update({
+    const updatedRecord = await db.transportRecord.update({
       where: { id },
       data
     });
@@ -98,7 +101,7 @@ export async function DELETE(request, { params }) {
     }
     
     // Check if record exists
-    const existingRecord = await prisma.transportRecord.findUnique({
+    const existingRecord = await db.transportRecord.findUnique({
       where: { id }
     });
     
@@ -107,7 +110,7 @@ export async function DELETE(request, { params }) {
     }
     
     // Delete record
-    await prisma.transportRecord.delete({
+    await db.transportRecord.delete({
       where: { id }
     });
     

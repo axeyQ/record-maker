@@ -53,8 +53,8 @@ export function formatDateForExport(date) {
       `"${record.vehicleNumber || ''}"`,
       formatDateForExport(record.pickupDateTime),
       record.amountPaid || '0',
-      formatDateForExport(record.createdAt),
-      formatDateForExport(record.updatedAt)
+      record.createdAt ? formatDateForExport(record.createdAt) : '',
+      record.updatedAt ? formatDateForExport(record.updatedAt) : ''
     ].join(','));
     
     return [headers, ...rows].join('\n');
@@ -70,8 +70,8 @@ export function formatDateForExport(date) {
       ...record,
       idTypeFormatted: formatIdType(record.idType),
       pickupDateTimeFormatted: formatDateForDisplay(record.pickupDateTime),
-      createdAtFormatted: formatDateForDisplay(record.createdAt),
-      updatedAtFormatted: formatDateForDisplay(record.updatedAt)
+      createdAtFormatted: record.createdAt ? formatDateForDisplay(record.createdAt) : null,
+      updatedAtFormatted: record.updatedAt ? formatDateForDisplay(record.updatedAt) : null
     };
   }
   

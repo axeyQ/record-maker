@@ -2,6 +2,9 @@ import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { recordsToCSV, generateExportFilename, formatRecordsForDisplay } from '@/lib/exportUtils';
 
+// This ensures the Prisma Client is only initiated once during runtime
+let db = prisma;
+
 // GET - Export records (Query param ?format=csv or ?format=json)
 export async function GET(request) {
   try {
@@ -65,7 +68,7 @@ export async function GET(request) {
         };
     
     // Get records with filters for export
-    const records = await prisma.transportRecord.findMany({
+    const records = await db.transportRecord.findMany({
       where,
       select,
       orderBy: {
