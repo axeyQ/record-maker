@@ -1,0 +1,29 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql" // Use your preferred database provider here
+  url      = env("DATABASE_URL")
+}
+
+model TransportRecord {
+  id           Int      @id @default(autoincrement())
+  name         String
+  mobileNumber String
+  idNumber     String
+  idType       IdType   
+  vehicleNumber String
+  pickupDateTime DateTime
+  amountPaid   Decimal  @db.Decimal(10, 2)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+enum IdType {
+  AADHAR_CARD
+  DRIVING_LICENSE
+}
