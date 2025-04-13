@@ -1,10 +1,12 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Suspense } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import TransportRecordForm from '@/components/TransportRecordForm';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
 
-export default function EditRecordPage() {
+// Content component with useParams usage
+function EditRecordContent() {
   const params = useParams();
   const router = useRouter();
   const [record, setRecord] = useState(null);
@@ -68,5 +70,18 @@ export default function EditRecordPage() {
       <h1 className="text-2xl font-bold mb-6">Edit Transport Record</h1>
       {record && <TransportRecordForm initialData={record} />}
     </div>
+  );
+}
+
+// Main page component with Suspense boundary
+export default function EditRecordPage() {
+  return (
+    <Suspense fallback={
+      <div className="max-w-4xl mx-auto py-8 px-4 flex justify-center items-center min-h-[50vh]">
+        <LoadingSpinner size="lg" />
+      </div>
+    }>
+      <EditRecordContent />
+    </Suspense>
   );
 }

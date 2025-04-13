@@ -1,11 +1,13 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Suspense } from 'react';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { printRecords } from '@/lib/printUtils';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
 
-export default function RecordDetailPage() {
+// Content component with useParams usage
+function RecordDetailContent() {
   const params = useParams();
   const router = useRouter();
   const [record, setRecord] = useState(null);
@@ -207,5 +209,18 @@ export default function RecordDetailPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+// Main page component with Suspense boundary
+export default function RecordDetailPage() {
+  return (
+    <Suspense fallback={
+      <div className="max-w-3xl mx-auto py-8 px-4 flex justify-center items-center min-h-[50vh]">
+        <LoadingSpinner size="lg" />
+      </div>
+    }>
+      <RecordDetailContent />
+    </Suspense>
   );
 }

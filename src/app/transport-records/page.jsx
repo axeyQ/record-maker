@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import TransportRecordsTable from '@/components/TransportRecordsTable';
@@ -8,8 +8,10 @@ import SearchFilters from '@/components/SearchFilters';
 import Pagination from '@/components/Pagination';
 import EnhancedExport from '@/components/EnhancedExport';
 import PrintButton from '@/components/PrintButton';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
 
-export default function TransportRecordsPage() {
+// This component uses useSearchParams() and needs Suspense
+function TransportRecordsContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   
@@ -191,5 +193,18 @@ export default function TransportRecordsPage() {
         </>
       )}
     </div>
+  );
+}
+
+// Main page component with Suspense boundary
+export default function TransportRecordsPage() {
+  return (
+    <Suspense fallback={
+      <div className="max-w-7xl mx-auto py-6 px-4 flex justify-center items-center min-h-[50vh]">
+        <LoadingSpinner size="lg" />
+      </div>
+    }>
+      <TransportRecordsContent />
+    </Suspense>
   );
 }
