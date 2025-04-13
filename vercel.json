@@ -1,6 +1,6 @@
 {
-  "buildCommand": "npm run postinstall && npm run build",
-  "installCommand": "npm install",
+  "buildCommand": "chmod +x remove-postcss-config.js.sh && ./remove-postcss-config.js.sh && npm install --include=dev --production=false && npm run postinstall && npm run build",
+  "installCommand": "npm install --include=dev",
   "framework": "nextjs",
   "outputDirectory": ".next"
 }
